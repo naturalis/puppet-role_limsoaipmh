@@ -44,17 +44,14 @@
 #
 class limsoaipmh {
 
-  package {'openjdk-7-jdk':
-    ensure => present,
-    before => Class['wildfly'],
-  }
+  class { '::java':  }
 
   class { 'wildfly':
-    version          => '8.2.0',
-    install_source   => 'http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.2.0.Final.tar.gz',
-    group            => 'wildfly',
-    user             => 'wildfly',
-    dirname          => '/opt/wildfly',
+    version          => '8.2.1',
+    install_source   => 'http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.2.1.Final.tar.gz',
+    #group            => 'wildfly',
+    #user             => 'wildfly',
+    #dirname          => '/opt/wildfly',
     java_home        => '/usr/lib/jvm/java-1.7.0-openjdk-amd64',
     java_xmx         => '1024m',
     java_xms         => '256m',
@@ -66,6 +63,7 @@ class limsoaipmh {
         password => 'wildfly'
         }
       },
+    require => class['::java']
   }
 
   # exec {'create nba conf dir':
