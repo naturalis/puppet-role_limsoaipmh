@@ -63,7 +63,7 @@ class limsoaipmh {
         password => 'wildfly'
         }
       },
-    require => class['::java']
+    require => Class['::java']
   }
 
   # exec {'create nba conf dir':
