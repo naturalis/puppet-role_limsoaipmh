@@ -104,7 +104,7 @@ class role_limsoaipmh (
     members => ['localhost:8080'],
   }
 
-  nginx::resource::vhost { 'limsoaipmf.naturalis.nl':
+  nginx::resource::vhost { 'limsoaipmh.naturalis.nl':
     proxy       => 'http://limsoaipmh_naturalis_nl',
     ssl         => true,
     listen_port => 443,
