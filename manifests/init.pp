@@ -112,6 +112,10 @@ class role_limsoaipmh (
     listen_port => 443,
     ssl_cert    => '/etc/ssl/lims_cert.pem',
     ssl_key     => '/etc/ssl/lims_key.pem',
+    require     => [
+      File['/etc/ssl/lims_key.pem'],
+      File['/etc/ssl/lims_cert.pem']
+    ],
   }
 
 }
