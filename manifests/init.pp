@@ -100,6 +100,8 @@ class role_limsoaipmh (
     mode    => '0644',
   }
 
+  include ::nginx
+
   ::nginx::resource::upstream { 'limsoaipmh_naturalis_nl':
     members => ['localhost:8080'],
   }
