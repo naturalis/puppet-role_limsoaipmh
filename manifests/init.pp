@@ -80,6 +80,15 @@ class role_limsoaipmh (
     before => Class['::wildfly'],
   }
 
+  file {'/etc/limsoaipmh/oaipmf.properties':
+    ensure  => present,
+    content => '### Provided by PUPPET ###
+nl.naturalis.oaipmh.datetime.pattern = yyyy-MM-dd\'T\'HH\:mm\:ss\'Z\'
+nl.naturalis.oaipmh.date.pattern = yyyy-MM-dd',
+    before  => Class['::wildfly'],
+    require => File['/etc/limsoaipmh'],
+  }
+
   exec {'create lims logger':
     cwd     => '/opt/wildfly/bin',
     command => '/opt/wildfly/bin/jboss-cli.sh -c command="/subsystem=logging/logger=nl.naturalis.lims2.oaipmh:add(level=DEBUG)"',
