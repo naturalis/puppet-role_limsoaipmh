@@ -59,7 +59,7 @@ class role_limsoaipmh (
     java_xmx         => '1024m',
     java_xms         => '256m',
     java_maxpermsize => '512m',
-    public_bind      => '127.0.0.1'
+    public_bind      => '127.0.0.1',
     mgmt_bind        => '127.0.0.1',
     users_mgmt       => {
       'wildfly' => {
