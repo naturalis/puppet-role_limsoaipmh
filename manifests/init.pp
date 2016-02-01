@@ -100,11 +100,11 @@ class role_limsoaipmh (
     mode    => '0644',
   }
 
-  nginx::resource::upstream { 'limsoaipmh_naturalis_nl':
+  ::nginx::resource::upstream { 'limsoaipmh_naturalis_nl':
     members => ['localhost:8080'],
   }
 
-  nginx::resource::vhost { 'limsoaipmh.naturalis.nl':
+  ::nginx::resource::vhost { 'limsoaipmh.naturalis.nl':
     proxy       => 'http://limsoaipmh_naturalis_nl',
     ssl         => true,
     listen_port => 443,
