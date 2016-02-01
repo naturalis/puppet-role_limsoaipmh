@@ -80,13 +80,14 @@ class role_limsoaipmh (
     before => Class['::wildfly'],
   }
 
-  file {'/etc/limsoaipmh/oaipmf.properties':
+  file {'/etc/limsoaipmh/oaipmh.properties':
     ensure  => present,
     content => '### Provided by PUPPET ###
 nl.naturalis.oaipmh.datetime.pattern = yyyy-MM-dd\'T\'HH\:mm\:ss\'Z\'
 nl.naturalis.oaipmh.date.pattern = yyyy-MM-dd',
     before  => Class['::wildfly'],
     require => File['/etc/limsoaipmh'],
+    notify  => Service['wildfly'],
   }
 
   exec {'create lims logger':
