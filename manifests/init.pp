@@ -45,6 +45,14 @@
 class role_limsoaipmh (
   $private_key,
   $certificate,
+
+  $geneious_db_pass,
+  $geneious_db_host = '127.0.0.1',
+  $geneious_database = 'geneious',
+  $geneious_db_user = 'geneious',
+
+  $auto_deploy = true,
+  $wildfly_pass = 'wildfly'
   ) {
 
   class { '::java':  }
@@ -63,15 +71,21 @@ class role_limsoaipmh (
     mgmt_bind        => '127.0.0.1',
     users_mgmt       => {
       'wildfly' => {
-        password => 'wildfly'
+        password => $wildfly_pass
         }
       },
     require          => Class['::java']
   }
 
-  exec {'create nba conf dir':
+  exec {'create oaipmh conf dir':
     command => '/opt/wildfly/bin/jboss-cli.sh -c command="/system-property=nl.naturalis.oaipmh.conf.dir:add(value=/etc/limsoaipmh)"',
     unless  => '/opt/wildfly/bin/jboss-cli.sh -c command="ls system-property" | /bin/grep nl.naturalis.oaipmh.conf.dir',
+    require => Class['::wildfly'],
+  }
+
+  exec {'create log4j conf file':
+    command => '/opt/wildfly/bin/jboss-cli.sh -c command="/system-property=log4j.configurationFile:add(value=/etc/limsoaipmh/log4j2.xml)"',
+    unless  => '/opt/wildfly/bin/jboss-cli.sh -c command="ls system-property" | /bin/grep log4j.configurationFile',
     require => Class['::wildfly'],
   }
 
@@ -82,19 +96,47 @@ class role_limsoaipmh (
 
   file {'/etc/limsoaipmh/oaipmh.properties':
     ensure  => present,
-    content => '### Provided by PUPPET ###
-nl.naturalis.oaipmh.datetime.pattern = yyyy-MM-dd\'T\'HH\:mm\:ss\'Z\'
-nl.naturalis.oaipmh.date.pattern = yyyy-MM-dd',
+    content => template('role_limsoaipmh/oaipmh.properties.erb'),
     before  => Class['::wildfly'],
     require => File['/etc/limsoaipmh'],
     notify  => Service['wildfly'],
   }
 
-  exec {'create lims logger':
-    cwd     => '/opt/wildfly/bin',
-    command => '/opt/wildfly/bin/jboss-cli.sh -c command="/subsystem=logging/logger=nl.naturalis.lims2.oaipmh:add(level=DEBUG)"',
-    unless  => '/opt/wildfly/bin/jboss-cli.sh -c command="ls subsystem=logging/logger" | /bin/grep nl.naturalis.lims2.oaipmh',
-    require => Class['::wildfly'],
+  file {'/etc/limsoaipmh/oai-repo.geneious.properties':
+    ensure  => present,
+    content => template('role_limsoaipmh/oai-repo.geneious.properties.erb'),
+    before  => Class['::wildfly'],
+    require => File['/etc/limsoaipmh'],
+    notify  => Service['wildfly'],
+  }
+
+  file {'/etc/limsoaipmh/log4j2.xml':
+    ensure  => present,
+    content => template('role_limsoaipmh/log4j2.xml.erb'),
+    before  => Class['::wildfly'],
+    require => File['/etc/limsoaipmh'],
+    notify  => Service['wildfly'],
+  }
+
+  # exec {'create lims logger':
+  #   cwd     => '/opt/wildfly/bin',
+  #   command => '/opt/wildfly/bin/jboss-cli.sh -c command="/subsystem=logging/logger=nl.naturalis.lims2.oaipmh:add(level=DEBUG)"',
+  #   unless  => '/opt/wildfly/bin/jboss-cli.sh -c command="ls subsystem=logging/logger" | /bin/grep nl.naturalis.lims2.oaipmh',
+  #   require => Class['::wildfly'],
+  # }
+
+  file { '/opt/wildfly/standalone/deployments/oaipmh.war':
+    ensure  => present,
+    source  => 'puppet:///modules/role_limsoaipmh/oaipmh.war',
+    owner   => 'wildfly',
+    group   => 'wildfly',
+    require => [Class['wildfly'],
+      Exec['create oaipmh conf dir'],
+      Exec['create log4j conf file'],
+      File['/etc/limsoaipmh/oaipmh.properties'],
+      File['/etc/limsoaipmh/oai-repo.geneious.properties'],
+      File['/etc/limsoaipmh/log4j2.xml']],
+    notify  => service['wildfly']
   }
 
 
