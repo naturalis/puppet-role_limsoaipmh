@@ -136,7 +136,7 @@ class role_limsoaipmh (
       File['/etc/limsoaipmh/oaipmh.properties'],
       File['/etc/limsoaipmh/oai-repo.geneious.properties'],
       File['/etc/limsoaipmh/log4j2.xml']],
-    notify  => service['wildfly']
+    notify  => Service['wildfly']
   }
 
 
