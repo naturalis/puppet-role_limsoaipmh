@@ -4,9 +4,9 @@ dna-extract-plates.repo.impl.class=nl.naturalis.lims2.oaipmh.plates.DnaExtractPl
 dna-extracts.repo.impl.class=nl.naturalis.lims2.oaipmh.extracts.DnaExtractOAIRepository
 
 # Page size (number of records served per request)
-specimens.repo.pagesize=25
-dna-extract-plates.repo.pagesize=25
-dna-extracts.repo.pagesize=25
+specimens.repo.pagesize=<%= @specimens_pagesize %>
+dna-extract-plates.repo.pagesize=<%= @dna_plates_pagesize %>
+dna-extracts.repo.pagesize=<%= @dna_pagesize %>
 
 db.dsn=jdbc:mysql://<%= @geneious_db_host %>/<%= @geneious_database %>
 db.user=<%= @geneious_db_user %>
