@@ -168,7 +168,7 @@ class role_limsoaipmh (
     cwd         => '/opt/nl.naturalis.oaipmh/nl.naturalis.oaipmh.build',
     command     => '/usr/bin/ant clean build',
     refreshonly => true
-    subcribe    => Vcsrepo['/opt/nl.naturalis.oaipmh'],
+    subscribe   => Vcsrepo['/opt/nl.naturalis.oaipmh'],
     require     => [Class['wildfly'],
       Package['ant'],
       Exec['create oaipmh conf dir'],
