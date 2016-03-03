@@ -167,7 +167,7 @@ class role_limsoaipmh (
   exec {'make WAR ':
     cwd         => '/opt/nl.naturalis.oaipmh/nl.naturalis.oaipmh.build',
     command     => '/usr/bin/ant clean build',
-    refreshonly => true
+    refreshonly => true,
     subscribe   => Vcsrepo['/opt/nl.naturalis.oaipmh'],
     require     => [Class['wildfly'],
       Package['ant'],
