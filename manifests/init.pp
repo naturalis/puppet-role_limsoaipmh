@@ -46,6 +46,8 @@ class role_limsoaipmh (
   $private_key,
   $certificate,
 
+  $checkout = 'master',
+
   $geneious_db_pass,
   $geneious_db_host = '127.0.0.1',
   $geneious_database = 'geneious',
@@ -58,6 +60,11 @@ class role_limsoaipmh (
   $auto_deploy = true,
   $wildfly_pass = 'wildfly'
   ) {
+
+  package { ['git','ant']:
+    ensure => present,
+  }
+
 
   class { '::java':  }
 
@@ -129,18 +136,47 @@ class role_limsoaipmh (
   #   require => Class['::wildfly'],
   # }
 
-  file { '/opt/wildfly/standalone/deployments/oaipmh.war':
+  # file { '/opt/wildfly/standalone/deployments/oaipmh.war':
+  #   ensure  => present,
+  #   source  => 'puppet:///modules/role_limsoaipmh/oaipmh.war',
+  #   owner   => 'wildfly',
+  #   group   => 'wildfly',
+  #   require => [Class['wildfly'],
+  #     Exec['create oaipmh conf dir'],
+  #     Exec['create log4j conf file'],
+  #     File['/etc/limsoaipmh/oaipmh.properties'],
+  #     File['/etc/limsoaipmh/oai-repo.geneious.properties'],
+  #     File['/etc/limsoaipmh/log4j2.xml']],
+  #   notify  => Service['wildfly']
+  # }
+
+  vcsrepo { '/opt/nl.naturalis.oaipmh':
+    ensure   => present,
+    provider => git,
+    source   => 'git@github.com:naturalis/nl.naturalis.oaipmh.git',
+    revision => $checkout,
+    require  => Package['git'],
+  }
+
+  file {'/opt/nl.naturalis.oaipmh/nl.naturalis.oaipmh.build/build.properties':
     ensure  => present,
-    source  => 'puppet:///modules/role_limsoaipmh/oaipmh.war',
-    owner   => 'wildfly',
-    group   => 'wildfly',
-    require => [Class['wildfly'],
+    content => 'war.install.dir=/opt/wildfly/standalone/deployments',
+    require => Vcsrepo['/opt/nl.naturalis.oaipmh'],
+  }
+
+  exec {'make WAR ':
+    cwd         => '/opt/nl.naturalis.oaipmh/nl.naturalis.oaipmh.build',
+    command     => '/usr/bin/ant clean build',
+    refreshonly => true
+    subcribe    => Vcsrepo['/opt/nl.naturalis.oaipmh'],
+    require     => [Class['wildfly'],
+      Package['ant'],
       Exec['create oaipmh conf dir'],
       Exec['create log4j conf file'],
       File['/etc/limsoaipmh/oaipmh.properties'],
       File['/etc/limsoaipmh/oai-repo.geneious.properties'],
-      File['/etc/limsoaipmh/log4j2.xml']],
-    notify  => Service['wildfly']
+      File['/etc/limsoaipmh/log4j2.xml'],
+      File['/opt/nl.naturalis.oaipmh/nl.naturalis.oaipmh.build/build.properties']],
   }
 
 
