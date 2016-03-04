@@ -53,9 +53,9 @@ class role_limsoaipmh (
   $geneious_database = 'geneious',
   $geneious_db_user = 'geneious',
 
-  $specimens_pagesize = 25,
-  $dna_plates_pagesize = 25,
-  $dna_pagesize = 25,
+  $specimens_pagesize = 20,
+  $dna_plates_pagesize = 20,
+  $dna_pagesize = 20,
 
   $auto_deploy = true,
   $wildfly_pass = 'wildfly'
