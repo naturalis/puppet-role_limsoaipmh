@@ -152,6 +152,7 @@ class role_limsoaipmh (
 
   vcsrepo { '/opt/nl.naturalis.oaipmh':
     ensure   => present,
+    force    => true,
     provider => git,
     source   => 'https://github.com/naturalis/nl.naturalis.oaipmh',
     revision => $checkout,
