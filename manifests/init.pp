@@ -53,6 +53,8 @@ class role_limsoaipmh (
   $geneious_database = 'geneious',
   $geneious_db_user = 'geneious',
 
+  $git_repo_ensure = present,
+
   $specimens_pagesize = 20,
   $dna_plates_pagesize = 20,
   $dna_pagesize = 20,
@@ -151,7 +153,7 @@ class role_limsoaipmh (
   # }
 
   vcsrepo { '/opt/nl.naturalis.oaipmh':
-    ensure   => present,
+    ensure   => $git_repo_ensure,
     force    => true,
     provider => git,
     source   => 'https://github.com/naturalis/nl.naturalis.oaipmh',
