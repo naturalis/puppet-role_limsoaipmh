@@ -77,7 +77,7 @@ class role_limsoaipmh (
     #user             => 'wildfly',
     #dirname          => '/opt/wildfly',
     java_home        => '/usr/lib/jvm/java-1.7.0-openjdk-amd64',
-    java_xmx         => '1024m',
+    java_xmx         => '512m',
     java_xms         => '256m',
     java_maxpermsize => '512m',
     public_bind      => '127.0.0.1',
