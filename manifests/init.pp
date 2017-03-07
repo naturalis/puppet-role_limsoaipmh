@@ -60,7 +60,10 @@ class role_limsoaipmh (
   $dna_pagesize = 20,
 
   $auto_deploy = true,
-  $wildfly_pass = 'wildfly'
+  $wildfly_pass = 'wildfly',
+  
+  $loglevel = INFO,
+
   ) {
 
   package { ['git','ant']:

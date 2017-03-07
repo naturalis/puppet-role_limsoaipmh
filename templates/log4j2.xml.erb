@@ -9,13 +9,13 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="nl.naturalis.lims2" level="INFO" additivity="false">
+		<Logger name="nl.naturalis.lims2" level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>" additivity="false">
 			<AppenderRef ref="oaipmh" />
 		</Logger>
-		<Logger name="nl.naturalis.oaipmh" level="INFO" additivity="false">
+		<Logger name="nl.naturalis.oaipmh" level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>" additivity="false">
 			<AppenderRef ref="oaipmh" />
 		</Logger>
-		<Root level="INFO">
+		<Root level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>">
 			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>
