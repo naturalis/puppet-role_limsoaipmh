@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
 	<Appenders>
-		<Console name="Console">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
-		</Console>
-		<File name="oaipmh" fileName="/var/log/wildfly/oaipmh-lims2.log">
+		<File name="oaipmh" fileName="/var/log/wildfly/oaipmhlims.log">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
 		</File>
 	</Appenders>
@@ -12,11 +9,8 @@
 		<Logger name="nl.naturalis.lims2" level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>" additivity="false">
 			<AppenderRef ref="oaipmh" />
 		</Logger>
-		<Logger name="nl.naturalis.oaipmh" level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>" additivity="false">
+		<Root level="ERROR">
 			<AppenderRef ref="oaipmh" />
-		</Logger>
-		<Root level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>">
-			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>
 </Configuration>
