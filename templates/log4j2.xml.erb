@@ -6,7 +6,7 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="nl.naturalis.lims2" level="<%= scope.lookupvar('role_limsoaipmh::loglevel') %>" additivity="false">
+		<Logger name="nl.naturalis" level="<%= scope.lookupvar('role_limsoaipmh::log_level') %>" additivity="false">
 			<AppenderRef ref="oaipmh" />
 		</Logger>
 		<Root level="ERROR">

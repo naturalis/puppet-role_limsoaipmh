@@ -62,7 +62,7 @@ class role_limsoaipmh (
   $auto_deploy = true,
   $wildfly_pass = 'wildfly',
   
-  $loglevel = INFO,
+  $log_level = INFO,
 
   ) {
 
