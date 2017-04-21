@@ -61,8 +61,10 @@ class role_limsoaipmh (
 
   $auto_deploy = true,
   $wildfly_pass = 'wildfly',
-  
   $log_level = INFO,
+  $wildfly_xmx = '2g',
+  $wildfly_xms = '256m',
+  $wildfly_maxpermsize = '2g'
 
   ) {
 
@@ -80,9 +82,9 @@ class role_limsoaipmh (
     #user             => 'wildfly',
     #dirname          => '/opt/wildfly',
     java_home        => '/usr/lib/jvm/java-1.7.0-openjdk-amd64',
-    java_xmx         => '512m',
-    java_xms         => '256m',
-    java_maxpermsize => '512m',
+    java_xmx         => $wildfly_xmx,
+    java_xms         => $wildfly_xms,
+    java_maxpermsize => $wildfly_maxpermsize,
     public_bind      => '127.0.0.1',
     mgmt_bind        => '127.0.0.1',
     users_mgmt       => {
